@@ -4,6 +4,8 @@
 #include "MyActor.h"
 #include <cstdlib>
 
+#include "Particles/ParticleSystemComponent.h"
+
 // Sets default values
 AMyActor::AMyActor()
 {
@@ -12,12 +14,13 @@ AMyActor::AMyActor()
 	zValue = 30.5;
 	yValue = 30.5;
 	xValue = 30.5;
-	
 
-	// Create a dummy root component we can attach things to.
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	OurVisibleComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualMesh"));
 	OurVisibleComponent->SetupAttachment(RootComponent);
+	particleEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystem"));
+	particleEffect->SetupAttachment(RootComponent);
+	// Create a dummy root component we can attach things to
 	
 }
 
@@ -39,11 +42,13 @@ void AMyActor::Tick(float DeltaTime)
 	float RunningTime = GetGameTimeSinceCreation();
 	float DeltaHeight = (FMath::Sin(RunningTime + DeltaTime) - FMath::Sin(RunningTime));
 	
-	int random = rand() % 40;
+	float random = FMath::FRandRange(-50.0,50.0);
 	NewLocation.Z += DeltaHeight * zValue;//Scale our height by a factor of 20
 	//NewLocation.X += DeltaHeight * factor;
-	NewLocation.Y += DeltaHeight * static_cast<int>(random)* yValue;
-	NewLocation.X += DeltaHeight * static_cast<int>(random)* zValue;
+	
+	NewLocation.Y += DeltaHeight * FMath::FRandRange(-50.0,50.0) * yValue;
+	//NewLocation.Y += static_cast<int>(random)* yValue;
+	NewLocation.X += DeltaHeight * FMath::FRandRange(-50.0,50.0) * zValue;
 	
 	float DeltaRotation = DeltaTime * zValue;    //Rotate by 20 degrees per second
 	NewRotation.Yaw += DeltaRotation;
@@ -54,9 +59,8 @@ void AMyActor::Tick(float DeltaTime)
 
 	{
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("x: "), NewLocation.X));
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("y: "), NewLocation.Y));
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("z: "), NewLocation.Z));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("x: %f y: %f z: %f"), NewLocation.X,NewLocation.Y,NewLocation.Z));
+		
 
 
 	}

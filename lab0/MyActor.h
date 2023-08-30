@@ -11,7 +11,19 @@ UCLASS()
 class LAB0_API AMyActor : public AActor
 {
 	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* OurVisibleComponent;
 	
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent* particleEffect;
+
+	UPROPERTY(EditAnywhere, Category = "BobbingAndRotatingFactor")
+	float zValue;
+	UPROPERTY(EditAnywhere, Category = "XFactor")
+	float xValue;
+	UPROPERTY(EditAnywhere, Category = "YFactor")
+	float yValue;
 public:	
 	// Sets default values for this actor's properties
 	AMyActor();
@@ -24,17 +36,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere);
-
 	
-	UStaticMeshComponent* OurVisibleComponent;
-
-	UPROPERTY(EditAnywhere, Category = "BobbingAndRotatingFactor");
-	float zValue;
-	UPROPERTY(EditAnywhere, Category = "XFactor");
-	float xValue;
-	UPROPERTY(EditAnywhere, Category = "YFactor");
-	float yValue;
 	//FVector movement;
 
 };
